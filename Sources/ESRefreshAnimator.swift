@@ -33,6 +33,9 @@ open class ESRefreshAnimator: ESRefreshProtocol, ESRefreshAnimatorProtocol {
     open var insets: UIEdgeInsets
     // Refresh event is executed threshold required y offset, set a value greater than 0.0, the default is 60.0
     open var trigger: CGFloat = 60.0
+    
+    open var loadmoreTrigger: CGFloat = UIScreen.main.bounds.height
+
     // Offset y refresh event executed by this parameter you can customize the animation to perform when you refresh the view of reservations height
     open var executeIncremental: CGFloat = 60.0
     // Current refresh state, default is .pullToRefresh

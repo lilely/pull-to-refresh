@@ -42,6 +42,7 @@ open class ESRefreshHeaderAnimator: UIView, ESRefreshProtocol, ESRefreshAnimator
     open var view: UIView { return self }
     open var insets: UIEdgeInsets = UIEdgeInsets.zero
     open var trigger: CGFloat = 60.0
+    open var loadmoreTrigger: CGFloat = UIScreen.main.bounds.height
     open var executeIncremental: CGFloat = 60.0
     open var state: ESRefreshViewState = .pullToRefresh
 

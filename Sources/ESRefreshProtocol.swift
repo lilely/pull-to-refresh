@@ -74,6 +74,8 @@ public protocol ESRefreshAnimatorProtocol {
     // Refresh event is executed threshold required y offset, set a value greater than 0.0, the default is 60.0
     var trigger: CGFloat {set get}
     
+    var loadmoreTrigger: CGFloat {set get}
+
     // Offset y refresh event executed by this parameter you can customize the animation to perform when you refresh the view of reservations height
     var executeIncremental: CGFloat {set get}
     

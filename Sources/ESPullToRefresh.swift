@@ -417,7 +417,7 @@ open class ESRefreshFooterView: ESRefreshComponent {
         
         if scrollView.contentSize.height + scrollView.contentInset.top > scrollView.bounds.size.height {
             // 内容超过一个屏幕 计算公式，判断是不是在拖在到了底部
-            if scrollView.contentSize.height - scrollView.contentOffset.y + scrollView.contentInset.bottom  <= scrollView.bounds.size.height {
+            if scrollView.contentSize.height - scrollView.contentOffset.y + scrollView.contentInset.bottom  <= animator.loadmoreTrigger {
                 self.animator.refresh(view: self, stateDidChange: .refreshing)
                 self.startRefreshing()
             }
@@ -441,12 +441,17 @@ open class ESRefreshFooterView: ESRefreshComponent {
         let x = scrollView.contentOffset.x
         let y = max(0.0, scrollView.contentSize.height - scrollView.bounds.size.height + scrollView.contentInset.bottom)
         
-        // Call handler
-        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveLinear, animations: {
-            scrollView.contentOffset = CGPoint.init(x: x, y: y)
-        }, completion: { (animated) in
+        let footAnimator = self.animator as? ESRefreshFooterAnimator
+        if footAnimator != nil &&  !footAnimator!.needScrollToBottom {
             self.handler?()
-        })
+        } else {
+            // Call handler
+            UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveLinear, animations: {
+                scrollView.contentOffset = CGPoint.init(x: x, y: y)
+            }, completion: { (animated) in
+                self.handler?()
+            })
+        }
     }
     
     open override func stop() {
@@ -465,21 +470,23 @@ open class ESRefreshFooterView: ESRefreshComponent {
             super.stop()
         })
 
-        // Stop deceleration of UIScrollView. When the button tap event is caught, you read what the [scrollView contentOffset].x is, and set the offset to this value with animation OFF.
-        // http://stackoverflow.com/questions/2037892/stop-deceleration-of-uiscrollview
-        if scrollView.isDecelerating {
-            var contentOffset = scrollView.contentOffset
-            contentOffset.y = min(contentOffset.y, scrollView.contentSize.height - scrollView.frame.size.height)
-            if contentOffset.y < 0.0 {
-                contentOffset.y = 0.0
-                UIView.animate(withDuration: 0.1, animations: { 
+        let footAnimator = self.animator as? ESRefreshFooterAnimator
+        if footAnimator != nil && footAnimator!.needScrollToBottom {
+            // Stop deceleration of UIScrollView. When the button tap event is caught, you read what the [scrollView contentOffset].x is, and set the offset to this value with animation OFF.
+            // http://stackoverflow.com/questions/2037892/stop-deceleration-of-uiscrollview
+            if scrollView.isDecelerating {
+                var contentOffset = scrollView.contentOffset
+                contentOffset.y = min(contentOffset.y, scrollView.contentSize.height - scrollView.frame.size.height)
+                if contentOffset.y < 0.0 {
+                    contentOffset.y = 0.0
+                    UIView.animate(withDuration: 0.1, animations: {
+                        scrollView.setContentOffset(contentOffset, animated: false)
+                    })
+                } else {
                     scrollView.setContentOffset(contentOffset, animated: false)
-                })
-            } else {
-                scrollView.setContentOffset(contentOffset, animated: false)
+                }
             }
         }
-        
     }
     
     /// Change to no-more-data status.

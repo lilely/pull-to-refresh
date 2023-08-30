@@ -35,6 +35,9 @@ open class ESRefreshFooterAnimator: UIView, ESRefreshProtocol, ESRefreshAnimator
     open var duration: TimeInterval = 0.3
     open var insets: UIEdgeInsets = UIEdgeInsets.zero
     open var trigger: CGFloat = 42.0
+    open var loadmoreTrigger: CGFloat = UIScreen.main.bounds.height
+    open var needScrollToBottom: Bool = true
+    open var needStopAnimation: Bool = true
     open var executeIncremental: CGFloat = 42.0
     open var state: ESRefreshViewState = .pullToRefresh
     
