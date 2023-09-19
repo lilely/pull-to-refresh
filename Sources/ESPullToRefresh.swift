@@ -355,7 +355,7 @@ open class ESRefreshFooterView: ESRefreshComponent {
                 rect.origin.y = scrollView?.contentSize.height ?? 0.0
                 self.frame = rect
             } else {
-                scrollView?.contentInset.bottom = scrollViewInsets.bottom + animator.executeIncremental
+//                scrollView?.contentInset.bottom = scrollViewInsets.bottom + animator.executeIncremental
                 var rect = self.frame
                 rect.origin.y = scrollView?.contentSize.height ?? 0.0
                 self.frame = rect
