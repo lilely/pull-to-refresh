@@ -437,21 +437,7 @@ open class ESRefreshFooterView: ESRefreshComponent {
         super.start()
         
         self.animator.refreshAnimationBegin(view: self)
-        
-        let x = scrollView.contentOffset.x
-        let y = max(0.0, scrollView.contentSize.height - scrollView.bounds.size.height + scrollView.contentInset.bottom)
-        
-        let footAnimator = self.animator as? ESRefreshFooterAnimator
-        if footAnimator != nil &&  !footAnimator!.needScrollToBottom {
-            self.handler?()
-        } else {
-            // Call handler
-            UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveLinear, animations: {
-                scrollView.contentOffset = CGPoint.init(x: x, y: y)
-            }, completion: { (animated) in
-                self.handler?()
-            })
-        }
+        self.handler?()
     }
     
     open override func stop() {
